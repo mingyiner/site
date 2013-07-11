@@ -1,0 +1,104 @@
+package
+{
+	import com.greensock.events.LoaderEvent;
+	import com.greensock.loading.LoaderMax;
+	import com.greensock.loading.SWFLoader;
+	import com.greensock.loading.XMLLoader;
+	import com.wisemind.oceanus.interfaces.IDestroy;
+	
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	
+	public class SubStage extends EventDispatcher implements IDestroy
+	{
+		private var loader:LoaderMax;
+		public var stageAddr:String;
+		public var stageDataAddr:String;
+		private var stage:Object = null;
+		private var data:Object = null;
+		public function SubStage(param1:String = null, param2:String = null)
+		{
+			stageAddr = param1;
+			stageDataAddr = param2;
+		}
+		public function reset() : void
+		{
+			disposeLoader();
+			stage = null;
+			data = null;
+		}
+		
+		public function get progress() : Number
+		{
+			return loader == null ? (0) : (loader.progress);
+		}
+
+		public function load() : void
+		{
+			if (stageAddr == null || stageAddr == "")
+			{
+				throw new UninitializedError("data not initialized, please set an address for loading first...");
+			}
+			reset();
+			loader = new LoaderMax();
+			loader.addEventListener(LoaderEvent.PROGRESS, loadingProgress);
+			loader.addEventListener(LoaderEvent.COMPLETE, loadingDone);
+			loader.addEventListener(LoaderEvent.ERROR, loadingError);
+			if (stageDataAddr != null && stageDataAddr != "")
+			{
+				loader.append(new XMLLoader(stageDataAddr, {name:"xmlLoader"}));
+			}
+			loader.append(new SWFLoader(stageAddr, {name:"swfLoader"}));
+			loader.load();
+		}
+		private function loadingProgress(event:LoaderEvent) : void
+		{
+			dispatchEvent(event);
+			return;
+		}
+		
+		private function loadingDone(event:LoaderEvent) : void
+		{
+			this.stage = SWFLoader(LoaderMax.getLoader("swfLoader")).rawContent;
+			var xmlLoader:XMLLoader= LoaderMax.getLoader("xmlLoader") as XMLLoader;
+			this.data = !xmlLoader ? xmlLoader.content:null;
+			disposeLoader();
+			dispatchEvent(event);
+			return;
+		}
+		
+		private function loadingError(event:LoaderEvent) : void
+		{
+			disposeLoader();
+			dispatchEvent(event);
+		}
+		public function disposeLoader() : void
+		{
+			if (loader != null)
+			{
+				loader.removeEventListener(LoaderEvent.PROGRESS, loadingProgress);
+				loader.removeEventListener(LoaderEvent.COMPLETE, loadingDone);
+				loader.removeEventListener(LoaderEvent.ERROR, loadingError);
+				loader.removeEventListener(LoaderEvent.IO_ERROR, loadingError);
+				loader.removeEventListener(LoaderEvent.FAIL, loadingError);
+				loader.dispose();
+			}
+			return;
+		}
+		public function set stageAddress(str:String) : void
+		{
+			stageAddr = str;
+			return;
+		}// end function
+		
+		public function set stageDataAddress(str:String) : void
+		{
+			stageDataAddr = str;
+			return;
+		}// end function
+		public function destroy():void
+		{
+			disposeLoader();
+		}
+	}
+}

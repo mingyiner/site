@@ -1,0 +1,17 @@
+package
+{
+	import com.greensock.TweenLite;
+	
+	import flash.display.Sprite;
+	
+	public class flashsite extends Sprite
+	{
+		public function flashsite()
+		{
+			initMc();
+		}
+		private function initMc():void{
+			
+		}
+	}
+}

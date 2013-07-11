@@ -1,0 +1,39 @@
+﻿package effect
+{
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Expo;
+	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	import flash.system.Capabilities;
+	
+	public class EffectPerson extends Sprite
+	{
+		public var mc:MovieClip
+		private var w:Number;
+		private var h:Number;
+		public function EffectPerson(_mc:MovieClip)
+		{
+			mc = _mc;
+			mc.x = mc.y = 0;
+			mc.alpha = 0;
+			addChild(mc);
+			w = (Capabilities.screenResolutionX - mc.width);
+			trace(w);
+			//h = (Capabilities.screenResolutionY - mc.height)/2;
+			super();
+		}
+		public function show(value:Boolean):void{
+			value?light:gray;
+		}
+		public function light():void{
+			TweenLite.killTweensOf(mc);
+			mc.filters = null;			
+		}
+		public function gray():void{
+			//mc.filters = 
+			TweenLite.to(mc,0.2,{blurFilter:{blurX:20, blurY:20}});
+		}
+	
+	}
+}

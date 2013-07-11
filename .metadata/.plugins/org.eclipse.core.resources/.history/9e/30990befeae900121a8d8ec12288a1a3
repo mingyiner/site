@@ -1,0 +1,194 @@
+﻿package  {
+	
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Expo;
+	import com.greensock.layout.AlignMode;
+	import com.greensock.layout.AutoFitArea;
+	import com.greensock.layout.ScaleMode;
+	
+	import effect.EffectPerson;
+	import effect.FlashButton;
+	
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
+	import flash.system.Capabilities;
+	
+	
+	public class CareerContent extends MovieClip {
+		
+		/**
+		 *人 logo
+		 */		
+		public var personLogo:MovieClip;
+		/**
+		 *兽 logo
+		 */		
+		public var orcLogo:MovieClip;
+		/**
+		 *亡灵 logo
+		 */		
+		public var ghostLogo:MovieClip;
+		
+		private var personLogoBtn:FlashButton;
+		private var orcLogoBtn:FlashButton;
+		private var ghostLogoBtn:FlashButton;
+		
+		private var effectPerson:EffectPerson;
+		private var effectOrc:EffectPerson;
+		private var effectGhost:EffectPerson;
+		
+		private var btnArr:Vector.<FlashButton>
+		private var careerArr:Vector.<EffectPerson>;
+		
+		private var fitArea:AutoFitArea;
+		
+		public var personDes:MovieClip;
+		public var ghostDes:MovieClip;
+		public var orcDes:MovieClip;
+		private var desArr:Vector.<MovieClip>;
+		public var pContainerMc:MovieClip;
+		
+		public var midPersonArr:Object = {"orc":{'x':0,'y':95,"scale":0.7},"person":{'x':374,'y':0,"scale":1},"ghost":{'x':665,'y':85,"scale":0.7},'height':643};
+		public var midOrcArr:Object = {"orc":{'x':110,'y':0,"scale":1},"person":{'x':0,'y':324,"scale":0.7},"ghost":{'x':764,'y':212,"scale":0.7},'height':783};
+		public var midGhostArr:Object = {"orc":{'x':0,'y':236,"scale":0.7},"person":{'x':822,'y':330,"scale":0.7},"ghost":{'x':192,'y':0,"scale":1},'height':784};//784
+		
+		public function CareerContent() {
+		
+
+			//=====================================================
+			personLogoBtn = new FlashButton(personLogo);
+			personLogoBtn.index = 0;
+			addChild(personLogoBtn);
+			
+			orcLogoBtn = new FlashButton(orcLogo);
+			orcLogoBtn.index = 1;
+			addChild(orcLogoBtn);
+			
+			ghostLogoBtn = new FlashButton(ghostLogo);
+			ghostLogoBtn.index = 2;
+			addChild(ghostLogoBtn);
+			
+			personLogoBtn.addEventListener(MouseEvent.CLICK,clickHandler);
+			orcLogoBtn.addEventListener(MouseEvent.CLICK,clickHandler);
+			ghostLogoBtn.addEventListener(MouseEvent.CLICK,clickHandler);
+			
+			btnArr = new Vector.<FlashButton>();
+			btnArr.push(personLogoBtn);
+			btnArr.push(orcLogoBtn);
+			btnArr.push(ghostLogoBtn);
+			//=================================================
+
+			effectPerson = new EffectPerson(pContainerMc.personMc);
+			effectOrc = new EffectPerson(pContainerMc.orcMc);
+			effectGhost = new EffectPerson(pContainerMc.ghostMc);
+			
+			pContainerMc.addChild(effectPerson);
+			pContainerMc.addChild(effectOrc);
+			pContainerMc.addChild(effectGhost);
+			
+			careerArr = new Vector.<EffectPerson>;
+			careerArr.push(effectPerson);
+			careerArr.push(effectOrc);
+			careerArr.push(effectGhost);
+
+			//addChild(pContainerMc);
+			//===========================================
+			desArr = new Vector.<MovieClip>();
+			desArr.push(personDes);
+			desArr.push(orcDes);
+			desArr.push(ghostDes);
+			//=============================================
+			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
+		}
+		protected function addToStageHandler(event:Event):void
+		{
+			layout();
+			initElements();
+			
+		}
+		
+		protected function clickHandler(evt:MouseEvent):void
+		{
+			var index:int = FlashButton(evt.currentTarget).index;
+			setSelctBtnIndex(index);			
+		}
+		/**
+		 * 初始元素
+		 * 默认 是人
+		 */		
+		private function initElements():void{
+				
+			setSelctBtnIndex(0);
+		}
+		private function setSelctBtnIndex(index:int):void{
+			for (var i:int = 0; i < 3; i++) 
+			{
+				if(btnArr[i].index == index){
+					btnArr[i].startEffect();
+					btnArr[i].enabled = false;
+					playCareer(index);
+					TweenLite.to(desArr[i],.4,{alpha:1,y:btnArr[1].y});
+				}else{
+					careerArr[i].gray();
+					btnArr[i].destroy();
+					btnArr[i].enabled = true;
+					TweenLite.to(desArr[i],.2,{alpha:0,x:Capabilities.screenResolutionX,eas:Expo.easeOut()});
+				}
+			}
+			pContainerMc.x = (Capabilities.screenResolutionX-pContainerMc.width)/2;
+		}
+		/**
+		 * 
+		 * @param index	
+		 *0人
+		 *1兽
+		 *2亡灵 
+		 * 
+		 */		
+		private function playCareer(index:int):void{
+			var obj:Object = {};
+			switch(index)
+			{
+				case 0:
+					obj = midPersonArr;
+					break;
+				case 1:
+					obj = midOrcArr;
+					break;
+				case 2:
+					obj = midGhostArr;
+					break;
+
+			}
+			trace(index +"index");
+		
+			pContainerMc.y=stage.stageHeight - obj.height;
+			TweenLite.to(effectPerson,0.5,{x:obj.person.x,y:obj.person.y,scaleX:obj.person.scale,scaleY:obj.person.scale});
+			TweenLite.to(effectOrc,0.5,{x:obj.orc.x,y:obj.orc.y,scaleX:obj.orc.scale,scaleY:obj.orc.scale});
+			TweenLite.to(effectGhost,0.5,{x:obj.ghost.x,y:obj.ghost.y,scaleX:obj.ghost.scale,scaleY:obj.ghost.scale})
+
+			//TweenLite.delayedCall(0.6,function():void{
+				//pContainerMc.y=stage.stageHeight - pContainerMc.height;
+				//trace(pContainerMc.height +"pContainerMc.height");
+			//})
+			//pContainerMc.y=stage.stageHeight - obj.height;
+			pContainerMc.setChildIndex(careerArr[index],pContainerMc.numChildren - 1);
+			careerArr[index].light();
+			
+		}
+		private function layout():void{
+			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX, Capabilities.screenResolutionY);
+			//fitArea.attach(this["bg"], {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:Consts.MIN_HEIGHT, maxHeight:Consts.MAX_HEIGHT});			
+			
+			//pContainerMc.x = 250//(Capabilities.screenResolutionX-pContainerMc.width)/2;
+			for (var i:int = 0; i < 3; i++) 
+			{
+				btnArr[i].x = 200;
+				btnArr[i].y = 100+(btnArr[i].height+30)*i;
+			}
+		} 
+	}
+	
+}

@@ -1,0 +1,14 @@
+﻿package com.wisemind.oceanus.interfaces
+{
+
+    public interface IMain
+    {
+
+        public function IMain();
+
+        function initializeWithData(param1 = null) : void;
+
+        function close() : void;
+
+    }
+}

@@ -1,0 +1,21 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	
+	
+	public class Preloader extends MovieClip {
+		
+		
+		public function Preloader() {
+			// constructor code
+			initMc();
+		}
+		public function initMc():void{
+			bar.width = 100;
+		}
+		public function getTestFun():int{
+			return bar.width;
+		}
+	}
+	
+}

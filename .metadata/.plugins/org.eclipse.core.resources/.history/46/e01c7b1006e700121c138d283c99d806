@@ -1,0 +1,49 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	
+	
+	public class MainContent extends MovieClip {
+		
+		private var fitArea:AutoFitArea;
+
+		public function MainContent() {
+			addEventListener(Event.REMOVED_FROM_STAGE,removeFromStage);
+		}
+		
+		protected function removeFromStage(event:Event):void
+		{
+			fitArea = new AutoFitArea(this, 0, 0, stage.stageWidth, stage.stageHeight);
+			fitArea.attach(this.background, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:Consts.MIN_HEIGHT, maxHeight:Consts.MAX_HEIGHT});			
+		}
+		
+		public function layout() : void
+		{
+			if (!stage)
+			{
+				return;
+			}
+			fitArea.x = 0;
+			fitArea.y = 0;
+			fitArea.width = stage.stageWidth;
+			fitArea.height = stage.stageHeight;
+			var _loc_1:* = Consts.limitHeight(stage.stageHeight);
+			var _loc_2:* = _loc_1 - 8;
+			var _loc_3:* = _loc_1 - 69;
+			if (this.character1.y != _loc_2)
+			{
+				this.character1.y = _loc_2;
+			}
+			if (this.character2.y != _loc_3)
+			{
+				this.character2.y = _loc_3;
+			}
+			this.haze.x = (Consts.limitWidth(stage.stageWidth) - this.haze.width) / 2;
+			this.haze.y = _loc_1 - this.haze.height - 40;
+			clearTimeout(delayedResizeCharacterCall);
+			delayedResizeCharacterCall = setTimeout(resizeCharactersCall, 200);
+			return;
+	}
+	
+}

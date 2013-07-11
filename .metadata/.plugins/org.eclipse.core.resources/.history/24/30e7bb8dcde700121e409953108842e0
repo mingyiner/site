@@ -1,0 +1,25 @@
+package effect
+{
+	import com.greensock.TweenLite;
+	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	
+	public class EffectPerson extends Sprite
+	{
+		public var mc:MovieClip
+		public function EffectPerson(_mc:MovieClip)
+		{
+			mc = _mc;
+			super();
+		}
+		public function playEffect():void{
+			TweenLite.killTweensOf(mc);
+			TweenLite.to(mc,0.2,{x:500,alpha:1});
+		}
+		public function stopEffect():void{
+			
+		}
+	
+	}
+}

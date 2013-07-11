@@ -1,0 +1,29 @@
+﻿package {
+	
+	import com.wisemind.oceanus.Consts;
+	
+	import flash.display.MovieClip;
+	
+	
+	public class Preloader extends MovieClip {
+		
+		
+		public function Preloader() {
+			// constructor code
+			//initMc();
+		}
+
+		public function layout() : void
+		{
+			if (!stage)
+			{
+				return;
+			}
+			var _width:Number = Consts.limitWidth(stage.stageWidth);
+			var _height:Number = Consts.limitHeight(stage.stageHeight);
+			this['loading'].x = (_loc_1 - this.loading.width) / 2;
+			this['loading'].y = (_loc_2 - this.loading.height) / 2;
+			return;
+		}// end function
+	}
+}

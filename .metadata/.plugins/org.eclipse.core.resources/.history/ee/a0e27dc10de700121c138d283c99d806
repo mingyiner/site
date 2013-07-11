@@ -1,0 +1,19 @@
+package
+{
+	import com.wisemind.oceanus.interfaces.IDestroy;
+	
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	
+	public class SubStage extends EventDispatcher implements IDestroy
+	{
+		public function SubStage(target:IEventDispatcher=null)
+		{
+			super(target);
+		}
+		
+		public function destroy():void
+		{
+		}
+	}
+}

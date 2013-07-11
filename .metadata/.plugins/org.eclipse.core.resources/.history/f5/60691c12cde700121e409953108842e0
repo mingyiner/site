@@ -1,0 +1,18 @@
+package effect
+{
+	import flash.display.Sprite;
+	
+	public class EffectPerson extends Sprite
+	{
+		public function EffectPerson()
+		{
+			super();
+		}
+		public function playEffect():void{
+			
+		}
+		public function stopEffect():void{
+			
+		}
+	}
+}

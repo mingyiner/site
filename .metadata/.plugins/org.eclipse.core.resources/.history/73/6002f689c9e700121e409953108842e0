@@ -1,0 +1,12 @@
+package effect
+{
+	import flash.display.Sprite;
+	
+	public class FlashButton extends Sprite
+	{
+		public function FlashButton()
+		{
+			super();
+		}
+	}
+}

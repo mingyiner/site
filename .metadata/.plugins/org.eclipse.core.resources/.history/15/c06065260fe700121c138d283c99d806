@@ -1,0 +1,88 @@
+package
+{
+	import com.greensock.events.LoaderEvent;
+	import com.greensock.loading.LoaderMax;
+	import com.greensock.loading.SWFLoader;
+	import com.greensock.loading.XMLLoader;
+	import com.wisemind.oceanus.interfaces.IDestroy;
+	
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	
+	public class SubStage extends EventDispatcher implements IDestroy
+	{
+		private var loader:LoaderMax;
+		private var stageAddr:String;
+		private var stageDataAddr:String;
+		private var stage:Object = null;
+		private var data:Object = null;
+		public function SubStage(param1:String = null, param2:String = null)
+		{
+			stageAddr = param1;
+			stageDataAddr = param2;
+		}
+		public function reset() : void
+		{
+			disposeLoader();
+			stage = null;
+			data = null;
+		}
+		public function load() : void
+		{
+			if (stageAddr == null || stageAddr == "")
+			{
+				throw new UninitializedError("data not initialized, please set an address for loading first...");
+			}
+			reset();
+			loader = new LoaderMax();
+			loader.addEventListener(LoaderEvent.PROGRESS, loadingProgress);
+			loader.addEventListener(LoaderEvent.COMPLETE, loadingDone);
+			loader.addEventListener(LoaderEvent.ERROR, loadingError);
+			if (stageDataAddr != null && stageDataAddr != "")
+			{
+				loader.append(new XMLLoader(stageDataAddr, {name:"xmlLoader"}));
+			}
+			loader.append(new SWFLoader(stageAddr, {name:"swfLoader"}));
+			loader.load();
+		}
+		private function loadingProgress(event:LoaderEvent) : void
+		{
+			dispatchEvent(event);
+			return;
+		}// end function
+		
+		private function loadingDone(event:LoaderEvent) : void
+		{
+			this.stage = SWFLoader(LoaderMax.getLoader("swfLoader")).rawContent;
+			var _loc_2:* = LoaderMax.getLoader("xmlLoader") as XMLLoader;
+			this.data = _loc_2 == null ? (null) : (_loc_2.content);
+			disposeLoader();
+			dispatchEvent(event);
+			return;
+		}// end function
+		
+		private function loadingError(event:LoaderEvent) : void
+		{
+			disposeLoader();
+			dispatchEvent(event);
+			return;
+		}// end function
+		public function disposeLoader() : void
+		{
+			if (loader != null)
+			{
+				loader.removeEventListener(LoaderEvent.PROGRESS, loadingProgress);
+				loader.removeEventListener(LoaderEvent.COMPLETE, loadingDone);
+				loader.removeEventListener(LoaderEvent.ERROR, loadingError);
+				loader.removeEventListener(LoaderEvent.IO_ERROR, loadingError);
+				loader.removeEventListener(LoaderEvent.FAIL, loadingError);
+				loader.dispose();
+			}
+			return;
+		}// end function
+
+		public function destroy():void
+		{
+		}
+	}
+}

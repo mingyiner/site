@@ -1,0 +1,40 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	
+	
+	public class MainContent extends MovieClip {
+		
+		
+		public function MainContent() {
+			
+		}
+		public function layout() : void
+		{
+			if (!stage)
+			{
+				return;
+			}
+			fitArea.x = 0;
+			fitArea.y = 0;
+			fitArea.width = stage.stageWidth;
+			fitArea.height = stage.stageHeight;
+			var _loc_1:* = Consts.limitHeight(stage.stageHeight);
+			var _loc_2:* = _loc_1 - 8;
+			var _loc_3:* = _loc_1 - 69;
+			if (this.character1.y != _loc_2)
+			{
+				this.character1.y = _loc_2;
+			}
+			if (this.character2.y != _loc_3)
+			{
+				this.character2.y = _loc_3;
+			}
+			this.haze.x = (Consts.limitWidth(stage.stageWidth) - this.haze.width) / 2;
+			this.haze.y = _loc_1 - this.haze.height - 40;
+			clearTimeout(delayedResizeCharacterCall);
+			delayedResizeCharacterCall = setTimeout(resizeCharactersCall, 200);
+			return;
+	}
+	
+}

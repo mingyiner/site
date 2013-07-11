@@ -1,0 +1,36 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	
+	
+	public class MainMenuBar extends MovieClip {
+		
+		public var careerBtn:MenuButton;
+		public var visionBtn:MenuButton;
+		public var devlogBtn:MenuButton;
+		public var introBtn:MenuButton;
+		public function MainMenuBar() {
+			var _loc_2:MenuButton = null;
+			var _loc_3:String = null;
+			buttons = new Dictionary();
+			buttons["introBtn"] = this.introBtn;
+			buttons["careerBtn"] = this.careerBtn;
+			buttons["visionBtn"] = this.visionBtn;
+			buttons["devlogBtn"] = this.devlogBtn;
+			var _loc_1:int = 0;
+			while (_loc_1 < numChildren)
+			{
+				
+				_loc_2 = getChildAt(_loc_1) as MenuButton;
+				if (_loc_2)
+				{
+					_loc_3 = _loc_2.name.replace("Btn", "") + "Layer";
+					_loc_2.selectActiveLayer(_loc_3);
+				}
+				_loc_1++;
+			}
+			setupListeners();
+		}
+	}
+	
+}

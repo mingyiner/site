@@ -1,0 +1,36 @@
+﻿package {
+	
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Quad;
+	
+	import flash.display.MovieClip;
+	
+	
+	public class Preloader extends MovieClip {
+
+		private var loading:Loading;
+		public function Preloader() {
+			loading = new Loading();
+		}
+		
+		public function setProgress(value:Number) : void
+		{
+			TweenLite.killTweensOf(this['loading'].bar);
+			TweenLite.to(this['loading'].bar, 0.2, {scaleX:value, ease:Quad.easeInOut});
+			this['loading'].txt.text = int(value * 100) + "%";
+			return;
+		}
+		public function layout() : void
+		{
+			if (!stage)
+			{
+				return;
+			}
+			var _width:Number = Consts.limitWidth(stage.stageWidth);
+			var _height:Number = Consts.limitHeight(stage.stageHeight);
+			this['loading'].x = (_width - this['loading'].width) / 2;
+			this['loading'].y = (_height - this['loading'].height) / 2;
+			return;
+		}
+	}
+}

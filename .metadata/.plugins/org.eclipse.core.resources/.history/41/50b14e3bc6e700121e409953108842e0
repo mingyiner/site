@@ -1,0 +1,14 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	
+	
+	public class CareerPage extends MovieClip {
+		
+		
+		public function CareerPage() {
+			addEventListener();
+		}
+	}
+	
+}

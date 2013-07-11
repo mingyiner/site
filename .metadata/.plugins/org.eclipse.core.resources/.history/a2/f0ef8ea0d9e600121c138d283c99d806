@@ -1,0 +1,132 @@
+﻿package com.wisemind.oceanus.display
+{
+    import com.greensock.*;
+    import com.greensock.easing.*;
+    import com.greensock.layout.*;
+    import com.greensock.loading.*;
+    import com.wisemind.oceanus.*;
+    
+    import flash.display.*;
+    import flash.events.*;
+    import flash.geom.*;
+
+    public class VideoContainer extends Sprite
+    {
+        private var loader:VideoLoader;
+        private var overlay:Sprite;
+        private var bitmapData:BitmapData;
+        private var autoFitArea:AutoFitArea;
+
+        public function VideoContainer(vloader:VideoLoader)
+        {
+            bitmapData = new BitmapData(2, 2, true, 0x0);
+            bitmapData.fillRect(new Rectangle(0, 0, 1, 1), 0);
+            this.loader = vloader;
+            addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+        }
+
+        private function addedToStage(event:Event) : void
+        {
+            removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+            initElements();
+            return;
+        }
+
+        private function initElements() : void
+        {
+            addChild(loader.content);
+            initOverlay();
+            autoFitArea = new AutoFitArea(this, 0, 0, stage.stageWidth, stage.stageHeight);
+            autoFitArea.attach(loader.content, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH});
+            layout();
+            return;
+        }
+
+        private function initOverlay() : void
+        {
+            overlay = new Sprite();
+            overlay.alpha = 0.3;
+            var shape:Shape = new Shape();
+			shape.graphics.beginFill(0);
+			shape.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			shape.graphics.endFill();
+			shape.alpha = 0;
+            overlay.addChild(shape);
+            addChild(overlay);
+            return;
+        }
+
+        public function get videoLoader() : VideoLoader
+        {
+            return loader;
+        }
+
+        public function destroy() : void
+        {
+            if (overlay)
+            {
+                overlay.graphics.clear();
+            }
+            bitmapData.dispose();
+            bitmapData = null;
+            if (loader)
+            {
+                loader.dispose(true);
+            }
+            autoFitArea.destroy();
+            return;
+        }
+
+        public function set overlayVisible(isShow:Boolean) : void
+        {
+            var pro:Object = null;
+            if (this.overlay.visible == param1)
+            {
+                return;
+            }
+            TweenLite.killTweensOf(this.overlay);
+            if (isShow)
+            {
+                pro = {autoAlpha:1, ease:Quad.easeOut};
+            }
+            else
+            {
+                pro = {autoAlpha:0, ease:Quad.easeIn};
+            }
+            TweenLite.to(this.overlay, 0.2, _loc_2);
+            return;
+        }
+
+        public function redraw() : void
+        {
+            var _loc_1:Shape = null;
+            if (!stage)
+            {
+                return;
+            }
+            if (this.overlay)
+            {
+                overlay.graphics.clear();
+                _loc_1 = overlay.getChildAt(0) as Shape;
+                _loc_1.width = stage.stageWidth;
+                _loc_1.height = stage.stageHeight;
+                overlay.graphics.beginBitmapFill(bitmapData);
+                overlay.graphics.drawRect(0, 0, overlay.width, overlay.height);
+                overlay.graphics.endFill();
+            }
+            autoFitArea.x = 0;
+            autoFitArea.y = 0;
+            autoFitArea.width = stage.stageWidth;
+            autoFitArea.height = stage.stageHeight;
+            return;
+        }
+
+        public function layout() : void
+        {
+            trace("video resize...");
+            redraw();
+            return;
+        }
+
+    }
+}

@@ -1,0 +1,38 @@
+﻿package  {
+	
+	import event.MenuEvent;
+	
+	import flash.display.MovieClip;
+	import flash.utils.Dictionary;
+	
+	
+	public class MainMenuBar extends MovieClip {
+		
+		public var careerBtn:MenuButton;
+		public var visionBtn:MenuButton;
+		public var devlogBtn:MenuButton;
+		public var introBtn:MenuButton;
+		private var buttons:Dictionary;
+		private var clickFun:Function;
+		public function MainMenuBar() {
+			var btn:MenuButton;
+			var _loc_3:String = null;
+			buttons = new Dictionary();
+			buttons["introBtn"] = this.introBtn;
+			buttons["careerBtn"] = this.careerBtn;
+			buttons["visionBtn"] = this.visionBtn;
+			buttons["devlogBtn"] = this.devlogBtn;
+
+			for (var str:String in buttons)
+			{
+				MenuButton(buttons[str]).addEventListener(MenuEvent.MENU_CLICKED, buttonClicked, false, 0, true);
+			}
+		}
+		private function buttonClicked(evt:MenuEvent):void{
+			
+		}
+		public function set btClickHandler(f:Function):void{
+			
+		}
+	}
+}

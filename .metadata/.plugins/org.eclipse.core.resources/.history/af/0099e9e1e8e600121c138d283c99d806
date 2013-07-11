@@ -1,0 +1,65 @@
+﻿package  {
+	
+	import flash.display.BlendMode;
+	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
+	
+	
+	public class MenuButton extends MovieClip {
+		public var btnLayer:MovieClip;
+		private var _enabled:Boolean;
+		public function MenuButton() {
+			addEventListener(MouseEvent.MOUSE_OVER,overHandler,false,0,true);
+			addEventListener(MouseEvent.MOUSE_OUT,outHandler,false,0,true);
+			addEventListener(MouseEvent.CLICK,clickHandler,false,0,true);
+			btnLayer.cacheAsBitmap = true;
+			btnLayer.alpha = 0;
+			btnLayer.blendMode = BlendMode.SCREEN;
+			
+			var index:int;
+			while (index < btnLayer.numChildren)
+			{
+				
+				btnLayer.getChildAt(index).visible = false;
+				index++;
+			}
+		}
+		/**
+		 *高亮显示 
+		 * 
+		 */		
+		public function active():void{
+			TweenLite.to(this.activeLayer, 0.3, {alpha:0.85, ease:Quad.easeInOut});
+			dispatchEvent(new NavigationEvent(NavigationEvent.MENU_ACTIVE, this));
+		}
+		/**
+		 *灰态显示 
+		 * 
+		 */		
+		public function deactive():void{
+			
+		}
+		
+		public function get enabled():Boolean{
+			return _enabled;
+		}
+		public function set enabled(value:Boolean):void{
+			_enabled = value;
+			useHandCursor = value;
+		}
+		protected function outHandler(event:MouseEvent):void
+		{
+			
+		}
+		
+		protected function overHandler(event:MouseEvent):void
+		{
+			
+		}
+		protected function clickHandler(event:MouseEvent):void
+		{
+			
+		}
+	}
+	
+}

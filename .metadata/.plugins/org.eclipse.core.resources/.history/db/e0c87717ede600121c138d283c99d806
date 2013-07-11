@@ -1,0 +1,14 @@
+﻿package  {
+	
+	import flash.display.MovieClip;
+	
+	
+	public class MainMenuBar extends MovieClip {
+		
+		
+		public function MainMenuBar() {
+			// constructor code
+		}
+	}
+	
+}

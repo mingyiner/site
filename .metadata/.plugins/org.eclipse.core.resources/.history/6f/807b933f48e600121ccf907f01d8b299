@@ -1,0 +1,141 @@
+﻿package com.wisemind.oceanus
+{
+    import flash.display.*;
+    import flash.system.*;
+
+    public class Consts extends Object
+    {
+        public static const MIN_WIDTH:int = 980;
+        public static const MIN_HEIGHT:int = 600;
+        public static const MAX_WIDTH:int = 1920;
+        public static const MAX_HEIGHT:int = 993;
+        public static const ORIGINAL_WIDTH:int = 1680;
+        public static const ORIGINAL_HEIGHT:int = 800;
+        public static const MAIN_WEBSITE_URL:String = "http://www.7road.com";
+        public static var CROSS_DOMAIN_FILE:String = "";
+        public static var RESOURCE_ADDRESS_PREFIX:String = "";
+
+        public function Consts()
+        {
+            return;
+        }// end function
+
+        public static function limitWidth(_width:Number) : Number
+        {
+            var w:Number = _width;
+            if (w < MIN_WIDTH)
+            {
+                w = MIN_WIDTH;
+            }
+            if (w > MAX_WIDTH)
+            {
+                w = MAX_WIDTH;
+            }
+            return w;
+        }
+
+        public static function limitHeight(_height:Number) : Number
+        {
+            var h:Number = _height;
+            if (h < MIN_HEIGHT)
+            {
+                h = MIN_HEIGHT;
+            }
+            if (h > MAX_HEIGHT)
+            {
+                h = MAX_HEIGHT;
+            }
+            return h;
+        }
+
+        public static function getPreferredStageScale(param1:Stage) : Number
+        {
+            if (!param1)
+            {
+                return 1;
+            }
+            return Math.min(getStageScaleX(param1), getStageScaleY(param1));
+        }// end function
+
+        public static function getStageScaleX(param1:Stage) : Number
+        {
+            if (!param1)
+            {
+                return 1;
+            }
+            return limitWidth(param1.stageWidth) / ORIGINAL_WIDTH;
+        }// end function
+
+        public static function getStageScaleY(param1:Stage) : Number
+        {
+            if (!param1)
+            {
+                return 1;
+            }
+            return limitHeight(param1.stageHeight) / ORIGINAL_HEIGHT;
+        }// end function
+
+        private static function _fixUrls() : void
+        {
+            if (CROSS_DOMAIN_FILE == null)
+            {
+                CROSS_DOMAIN_FILE = "";
+            }
+            if (CROSS_DOMAIN_FILE.length > 0)
+            {
+                if (CROSS_DOMAIN_FILE.substr(0, 7) != "http://")
+                {
+                    CROSS_DOMAIN_FILE = "http://" + CROSS_DOMAIN_FILE;
+                }
+                if (CROSS_DOMAIN_FILE.substring((CROSS_DOMAIN_FILE.length - 1)) != "/")
+                {
+                    CROSS_DOMAIN_FILE = CROSS_DOMAIN_FILE + "/";
+                }
+            }
+            if (CROSS_DOMAIN_FILE != "")
+            {
+                CROSS_DOMAIN_FILE = CROSS_DOMAIN_FILE + "crossdomain.xml";
+            }
+            if (RESOURCE_ADDRESS_PREFIX == null)
+            {
+                RESOURCE_ADDRESS_PREFIX = "";
+            }
+            if (RESOURCE_ADDRESS_PREFIX.length > 0)
+            {
+                if (RESOURCE_ADDRESS_PREFIX.substr(0, 7) != "http://")
+                {
+                    RESOURCE_ADDRESS_PREFIX = "http://" + RESOURCE_ADDRESS_PREFIX;
+                }
+                if (RESOURCE_ADDRESS_PREFIX.substring((RESOURCE_ADDRESS_PREFIX.length - 1)) != "/")
+                {
+                    RESOURCE_ADDRESS_PREFIX = RESOURCE_ADDRESS_PREFIX + "/";
+                }
+            }
+            return;
+        }// end function
+
+        public static function InitializeCrossDomainPolicy() : void
+        {
+            _fixUrls();
+            if (CROSS_DOMAIN_FILE && CROSS_DOMAIN_FILE.length > 0)
+            {
+                Security.loadPolicyFile(CROSS_DOMAIN_FILE);
+            }
+            return;
+        }// end function
+
+        public static function constructResourceURL(param1:String) : String
+        {
+            if (!param1 || param1.length <= 0)
+            {
+                return param1;
+            }
+            if (!RESOURCE_ADDRESS_PREFIX || RESOURCE_ADDRESS_PREFIX.length <= 0)
+            {
+                return param1;
+            }
+            return RESOURCE_ADDRESS_PREFIX + param1;
+        }// end function
+
+    }
+}

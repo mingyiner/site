@@ -1,0 +1,132 @@
+﻿package com.wisemind.oceanus.display
+{
+    import com.greensock.*;
+    import com.greensock.easing.*;
+    import com.greensock.layout.*;
+    import com.greensock.loading.*;
+    import com.wisemind.oceanus.*;
+    import flash.display.*;
+    import flash.events.*;
+    import flash.geom.*;
+
+    public class VideoContainer extends Sprite
+    {
+        private var loader:VideoLoader;
+        private var overlay:Sprite;
+        private var bitmapData:BitmapData;
+        private var autoFitArea:AutoFitArea;
+
+        public function VideoContainer(param1:VideoLoader)
+        {
+            bitmapData = new BitmapData(2, 2, true, 4278190080);
+            bitmapData.fillRect(new Rectangle(0, 0, 1, 1), 0);
+            this.loader = param1;
+            addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+            return;
+        }
+
+        private function addedToStage(event:Event) : void
+        {
+            removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+            initElements();
+            return;
+        }
+
+        private function initElements() : void
+        {
+            addChild(loader.content);
+            initOverlay();
+            autoFitArea = new AutoFitArea(this, 0, 0, stage.stageWidth, stage.stageHeight);
+            autoFitArea.attach(loader.content, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH});
+            layout();
+            return;
+        }
+
+        private function initOverlay() : void
+        {
+            overlay = new Sprite();
+            overlay.alpha = 0.3;
+            var _loc_1:* = new Shape();
+            _loc_1.graphics.beginFill(0);
+            _loc_1.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+            _loc_1.graphics.endFill();
+            _loc_1.alpha = 0;
+            overlay.addChild(_loc_1);
+            addChild(overlay);
+            return;
+        }// end function
+
+        public function get videoLoader() : VideoLoader
+        {
+            return loader;
+        }// end function
+
+        public function destroy() : void
+        {
+            if (overlay)
+            {
+                overlay.graphics.clear();
+            }
+            bitmapData.dispose();
+            bitmapData = null;
+            if (loader)
+            {
+                loader.dispose(true);
+            }
+            autoFitArea.destroy();
+            return;
+        }// end function
+
+        public function set overlayVisible(param1:Boolean) : void
+        {
+            var _loc_2:Object = null;
+            if (this.overlay.visible == param1)
+            {
+                return;
+            }
+            TweenLite.killTweensOf(this.overlay);
+            if (param1)
+            {
+                _loc_2 = {autoAlpha:1, ease:Quad.easeOut};
+            }
+            else
+            {
+                _loc_2 = {autoAlpha:0, ease:Quad.easeIn};
+            }
+            TweenLite.to(this.overlay, 0.2, _loc_2);
+            return;
+        }// end function
+
+        public function redraw() : void
+        {
+            var _loc_1:Shape = null;
+            if (!stage)
+            {
+                return;
+            }
+            if (this.overlay)
+            {
+                overlay.graphics.clear();
+                _loc_1 = overlay.getChildAt(0) as Shape;
+                _loc_1.width = stage.stageWidth;
+                _loc_1.height = stage.stageHeight;
+                overlay.graphics.beginBitmapFill(bitmapData);
+                overlay.graphics.drawRect(0, 0, overlay.width, overlay.height);
+                overlay.graphics.endFill();
+            }
+            autoFitArea.x = 0;
+            autoFitArea.y = 0;
+            autoFitArea.width = stage.stageWidth;
+            autoFitArea.height = stage.stageHeight;
+            return;
+        }// end function
+
+        public function layout() : void
+        {
+            trace("video resize...");
+            redraw();
+            return;
+        }// end function
+
+    }
+}

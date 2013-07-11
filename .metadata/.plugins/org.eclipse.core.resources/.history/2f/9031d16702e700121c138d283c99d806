@@ -1,0 +1,69 @@
+package
+{
+	import flash.display.Sprite;
+	import flash.utils.Dictionary;
+	
+	public class LayeredSprite extends Sprite
+	{
+		protected var layers:Dictionary;
+		protected var nativeName:String;
+		
+		public function LayeredSprite(name:String)
+		{
+			this.nativeName = name;
+			this.layers = new Dictionary();
+			this.generateLayers();
+			return;
+		}
+		
+		override public function get name() : String
+		{
+			return nativeName;
+		}
+		
+		override public function set name(param1:String) : void
+		{
+			this.nativeName = param1;
+			return;
+		}
+		
+		private function generateLayers() : void
+		{
+			this.layers["background"] = new Sprite();
+			this.layers["content"] = new Sprite();
+			this.layers["toppest"] = new Sprite();
+			this.layers["tip"] = new Sprite();
+			addChild(this.layers["background"] as Sprite);
+			addChild(this.layers["content"] as Sprite);
+			addChild(this.layers["toppest"] as Sprite);
+			addChild(this.layers["tip"] as Sprite);
+			return;
+		}
+		
+		public function getLayer(param1:String) : Sprite
+		{
+			return this.layers[param1] as Sprite || null;
+		}// end function
+		
+		public function get background() : Sprite
+		{
+			return this.getLayer("background");
+		}// end function
+		
+		public function get content() : Sprite
+		{
+			return this.getLayer("content");
+		}// end function
+		
+		public function get toppest() : Sprite
+		{
+			return this.getLayer("toppest");
+		}// end function
+		
+		public function get tip() : Sprite
+		{
+			return this.getLayer("tip");
+		}// end function
+		
+	}
+}

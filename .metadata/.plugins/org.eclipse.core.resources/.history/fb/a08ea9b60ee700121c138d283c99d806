@@ -1,0 +1,25 @@
+package
+{
+	import com.greensock.loading.LoaderMax;
+	import com.wisemind.oceanus.interfaces.IDestroy;
+	
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	
+	public class SubStage extends EventDispatcher implements IDestroy
+	{
+		private var loader:LoaderMax;
+		private var stageAddr:String;
+		private var stageDataAddr:String;
+		private var stage:Object = null;
+		private var data:Object = null;
+		public function SubStage(param1:String = null, param2:String = null)
+		{
+			super(target);
+		}
+		
+		public function destroy():void
+		{
+		}
+	}
+}

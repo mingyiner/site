@@ -1,0 +1,22 @@
+package
+{
+	import com.greensock.TweenLite;
+	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	
+	public class flashsite extends Sprite
+	{
+		public var mc:MovieClip;
+		public function flashsite()
+		{
+			initMc();
+		}
+		private function initMc():void{
+			mc = new MovieClip();
+			mc.graphics.lineStyle(1);
+			mc.graphics.drawRect(0,0,100,100);
+			mc.graphics.endFill();
+		}
+	}
+}

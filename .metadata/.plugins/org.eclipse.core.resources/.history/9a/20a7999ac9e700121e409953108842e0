@@ -1,0 +1,17 @@
+package effect
+{
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	
+	public class FlashButton extends Sprite
+	{
+		public var btn:MovieClip;
+		public function FlashButton(mc:MovieClip)
+		{
+			if(mc){
+				
+			}
+			super();
+		}
+	}
+}

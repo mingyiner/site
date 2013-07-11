@@ -1,0 +1,31 @@
+package effect
+{
+	import com.greensock.TweenLite;
+	
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	
+	public class FlashButton extends Sprite
+	{
+		public var btn:MovieClip;
+		public function FlashButton(mc:MovieClip)
+		{
+			if(mc){
+				btn = mc;
+			}
+			super();
+		}
+		public function startEffect():void{
+			glowPlayBlurXBig();
+		}
+		private function glowPlayBlurXBig():void{
+			TweenLite.to(btn,0.3,{glowFilter:{color:0xff9900,alpha:1,blurX:16,blurY:16,strength:2},onComplete:glowPlay});
+		}
+		private function glowPlay():void{
+			TweenLite.to(btn,1,{glowFilter:{color:0xff9900,alpha:1,blurX:2,blurY:2,strength:2},onComplete:glowPlayBlurXBig});
+		}
+		public function stopEffect():void{
+			btn.filters = null;
+		}
+	}
+}

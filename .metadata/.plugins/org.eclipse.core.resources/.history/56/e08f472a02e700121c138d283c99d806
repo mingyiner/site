@@ -1,0 +1,12 @@
+package
+{
+	import flash.display.Sprite;
+	
+	public class LayeredSprite extends Sprite
+	{
+		public function LayeredSprite()
+		{
+			super();
+		}
+	}
+}
