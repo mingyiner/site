@@ -8,6 +8,8 @@
 	import flash.filters.ColorMatrixFilter;
 	import flash.system.Capabilities;
 	
+	import utils.ColorMatrix;
+	
 	public class EffectPerson extends Sprite
 	{
 		public var mc:MovieClip
@@ -34,10 +36,22 @@
 		}
 		public function gray():void{
 			
-			var mat:Array =[0.3086,0.6094,0.082,0,0,0.3086,0.6094,0.082,0,0,0.3086,0.6094,0.082,0,0,0,0,0,1,0];
-			var colorMat:ColorMatrixFilter = new ColorMatrixFilter(mat);
-			mc.filters = [colorMat];
+			//var mat:Array =[0.3086,0.6094,0.082,0,0,0.3086,0.6094,0.082,0,0,0.3086,0.6094,0.082,0,0,0,0,0,1,0];
+			//var colorMat:ColorMatrixFilter = new ColorMatrixFilter(mat);
+			//mc.filters = [colorMat];
 
+			var ld_Matrix:ColorMatrix=new ColorMatrix();
+			ld_Matrix.adjustBrightness(-50);
+			ld_Matrix.adjustSaturation(-20);
+			ld_Matrix.adjustContrast(-70);
+			//ld_Matrix.adjustBrightness();
+			var ld_Filter:ColorMatrixFilter=new ColorMatrixFilter(ld_Matrix);
+			
+			//ld_Matrix.SetBrightnessMatrix;  //设置亮度值，值的大小是 -255--255   0为中间值，向右为亮向左为暗。
+			
+			//ld_Filter.matrix = ld_Matrix.GetFlatArray();
+			
+			mc.filters = [ld_Filter];
 			//TweenLite.to(mc,0.2,{blurFilter:{blurX:10, blurY:10}});
 		}
 	

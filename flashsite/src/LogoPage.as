@@ -8,6 +8,7 @@
 	import com.greensock.layout.AutoFitArea;
 	import com.greensock.layout.ScaleMode;
 	
+	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -18,7 +19,7 @@
 	
 	public class LogoPage extends LayeredSprite {
 		
-		private var mainContent:MainContent;
+		public var mainContent:MainContent;
 		private var currentStage:Sprite;
 		private var mainMenu:MainMenuBar;
 		private var lastActivedButtonName:String;
@@ -26,16 +27,15 @@
 		private var subStageVisible:Boolean = false;
 		private var fitArea:AutoFitArea;
 		private static const SUB_STAGES:Object = {careerBtn:{file:"career.swf", data:null}};
-		public function LogoPage(content:MainContent,menu:MainMenuBar) {
+		public function LogoPage(content:MainContent,menu:MainMenuBar,bd:BitmapData) {
 			super("firstContent");
 			mainContent = content;
+			mainContent.bitmapData = bd;
 			mainMenu = menu;
-
+			
 			var loading:Preloader = new Preloader();
 			tip.addChild(loading);
 			TweenLite.to(loading, 0, {autoAlpha:0});
-			
-
 			
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
 		}
@@ -92,6 +92,7 @@
 			}
 			if(e.currentTarget.name == "logoBtn"){
 				
+				mainContent.animatedIn();
 				lastActivedButtonName = e.currentTarget.name;
 				if (currentStage != null && currentStage != this && content.contains(currentStage))
 				{
@@ -105,7 +106,6 @@
 					});
 				}
 				
-				//mainContent
 			}
 			var obj:Object = SUB_STAGES[e.target.name];
 			if (!obj)
@@ -161,9 +161,11 @@
 			theOldStage = currentStage;
 			//subStage.stageContent.loaderInfo.applicationDomain.getDefinition('CareerContent')
 			var curStage:* = subStage.stageContent as Sprite;
+			//if(currentStage){
+				//TweenLite.from(currentStage, 0.5, {blurFilter:{blurX:80}, autoAlpha:0, x:80, ease:Expo.easeOut});
+			//}
 			content.addChild(curStage);
 			//curStage.addEventListener(SubStageEvent.SUBSTAGE_CLOSE, onSubStageCommand);
-			TweenLite.from(curStage, 0.5, {blurFilter:{blurX:80}, autoAlpha:0, x:80, ease:Expo.easeOut});
 			currentStage = curStage;
 			subStageVisible = true;
 			if (theOldStage != null && theOldStage != this)
@@ -177,6 +179,7 @@
 				}
 				});
 			}
+			mainContent.destroy();
 			//CareerPage(curStage).initializeWithData(subStage.stageData);
 			return;
 		}

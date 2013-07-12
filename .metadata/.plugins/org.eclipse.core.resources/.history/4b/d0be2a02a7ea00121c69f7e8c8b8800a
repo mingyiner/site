@@ -1,0 +1,12 @@
+package utils
+{
+	import flash.events.Event;
+	
+	public class ColorMatrix extends Event
+	{
+		public function ColorMatrix(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		{
+			super(type, bubbles, cancelable);
+		}
+	}
+}

@@ -30,9 +30,9 @@
 		
 		protected function outHandler(event:MouseEvent):void
 		{
-			if(!_enabled){
+			//if(!_enabled){
 				destroy();
-			}
+			//}
 		}
 		
 		protected function overHandler(event:MouseEvent):void

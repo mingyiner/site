@@ -64,5 +64,23 @@
 			}
 			return RESOURCE_ADDRESS_PREFIX + url;
 		}
+		
+		public static function getStageScaleX(param1:Stage) : Number
+		{
+			if (!param1)
+			{
+				return 1;
+			}
+			return limitWidth(param1.stageWidth) / ORIGINAL_WIDTH;
+		}
+		
+		public static function getStageScaleY(param1:Stage) : Number
+		{
+			if (!param1)
+			{
+				return 1;
+			}
+			return limitHeight(param1.stageHeight) / ORIGINAL_HEIGHT;
+		}
     }
 }

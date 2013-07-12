@@ -31,9 +31,9 @@
 		 */		
 		public var ghostLogo:MovieClip;
 		
-		private var personLogoBtn:FlashButton;
-		private var orcLogoBtn:FlashButton;
-		private var ghostLogoBtn:FlashButton;
+		public var personLogoBtn:FlashButton;
+		public var orcLogoBtn:FlashButton;
+		public var ghostLogoBtn:FlashButton;
 		
 		private var effectPerson:EffectPerson;
 		private var effectOrc:EffectPerson;
@@ -54,21 +54,24 @@
 		public var midOrcArr:Object = {"orc":{'x':110,'y':0,"scale":1},"person":{'x':0,'y':324,"scale":0.7},"ghost":{'x':764,'y':212,"scale":0.7},'height':783};
 		public var midGhostArr:Object = {"orc":{'x':0,'y':236,"scale":0.7},"person":{'x':822,'y':330,"scale":0.7},"ghost":{'x':192,'y':0,"scale":1},'height':784};//784
 		
+		
+		private var bg:MovieClip;
 		public function CareerContent() {
 		
 
 			//========================按钮===========================
 			personLogoBtn = new FlashButton(personLogo);
 			personLogoBtn.index = 0;
-			addChild(personLogoBtn);
 			
 			orcLogoBtn = new FlashButton(orcLogo);
 			orcLogoBtn.index = 1;
-			addChild(orcLogoBtn);
 			
 			ghostLogoBtn = new FlashButton(ghostLogo);
 			ghostLogoBtn.index = 2;
+			
+			addChild(personLogoBtn);
 			addChild(ghostLogoBtn);
+			addChild(orcLogoBtn);
 			
 			personLogoBtn.addEventListener(MouseEvent.CLICK,clickHandler);
 			orcLogoBtn.addEventListener(MouseEvent.CLICK,clickHandler);
@@ -101,7 +104,11 @@
 			addChild(orcDes);
 			addChild(ghostDes);
 			//=======================背景====================
+			bg = new MovieClip();
+			addChildAt(bg,0);
+
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
+			addEventListener(Event.REMOVED_FROM_STAGE,removeFromStage);
 		}
 		protected function addToStageHandler(event:Event):void
 		{
@@ -119,7 +126,12 @@
 		 * 默认 是人
 		 */		
 		private function initElements():void{
-				
+			
+			bg.graphics.clear();
+			bg.graphics.beginFill(0x0,0.7);
+			bg.graphics.drawRect(0,0,Capabilities.screenResolutionX,stage.stageWidth);
+			bg.graphics.endFill();
+			
 			setSelctBtnIndex(0);
 		}
 		private function setSelctBtnIndex(index:int):void{
@@ -185,10 +197,16 @@
 			//pContainerMc.x = 250//(Capabilities.screenResolutionX-pContainerMc.width)/2;
 			for (var i:int = 0; i < 3; i++) 
 			{
-				btnArr[i].x = 200;
-				btnArr[i].y = 100+(btnArr[i].height+30)*i;
+				btnArr[i].x = 100;
+				btnArr[i].y = 200+(btnArr[i].height+30)*i;
 			}
-		} 
+		}
+		
+		private function removeFromStage(e:Event):void{
+			personLogoBtn.destroy();
+			orcLogoBtn.destroy();
+			ghostLogoBtn.destroy();
+		}
 	}
 	
 }

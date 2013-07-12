@@ -17,6 +17,7 @@
 	import com.greensock.plugins.SoundTransformPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	
+	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -152,7 +153,25 @@
 			var sloader:SWFLoader = loader.getLoader("swfLoader") as SWFLoader;
 			var content:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("MainContent") as Class;
 			var menu:Class= sloader.rawContent.loaderInfo.applicationDomain.getDefinition("MainMenuBar") as Class;
-			var logoPage:LogoPage = new LogoPage(new content(),new menu());
+			var bg:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("SiteBackground") as Class;
+			var tw1:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei1') as Class;
+			var tw2:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei2') as Class;
+			var tw3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei3') as Class;
+			var tw4:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei4') as Class;
+			
+			var bm1:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb1") as Class;
+			var bm2:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb2") as Class;
+			var bm3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb3") as Class;
+
+			var logoPage:LogoPage = new LogoPage(new content(),new menu(),new bg() as BitmapData);
+			logoPage.mainContent.tuowei1 = new tw1() as MovieClip;
+			logoPage.mainContent.tuowei2 = new tw2() as MovieClip;
+			logoPage.mainContent.tuowei3 = new tw3() as MovieClip;
+			logoPage.mainContent.tuowei4 = new tw4() as MovieClip;
+			
+			logoPage.mainContent.bomb1 = new bm1() as MovieClip;
+			logoPage.mainContent.bomb2 = new bm2() as MovieClip;
+			logoPage.mainContent.bomb3 = new bm3() as MovieClip;
 			mainStage.addChild(logoPage);
 			logoPage.initializeWithData();
 			//var i:IMain = sloader.rawContent as IMain;
