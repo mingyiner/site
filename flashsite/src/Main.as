@@ -57,6 +57,7 @@
 		{
 			var w:int = this.stage.stageWidth;
 			var h:int = this.stage.stageHeight;
+			stage.frameRate=30;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener(Event.RESIZE, onResize, false, 0, true);

@@ -12,11 +12,11 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.geom.Rectangle;
 	import flash.system.Capabilities;
 	import flash.utils.Timer;
 	import flash.utils.clearInterval;
 	import flash.utils.setInterval;
-	
 	
 	public class MainContent extends MovieClip implements ILayoutable {
 		
@@ -44,6 +44,12 @@
 		public var bomb3:MovieClip;
 		private var efLayer:MovieClip;
 		private var tid:int;
+		
+		private var twMC:MovieClip=null;
+		private var bmMc:MovieClip=null;
+		
+		private var mtwMC:MovieClip=null;
+		private	var mbmMc:MovieClip=null;
 /*		拖尾1 x:789 y:140 爆炸2 x:745 y:220
 		t4:x:939 y:32; b1:x:1000 y:240
 		t2:917 y:141  b3:x:857 y:256
@@ -62,7 +68,7 @@
 										 {tw:{'mc':'tuowei3','x':664,'y':44,'sacle':-1},bm:{'mc':'bomb1','x':492,'y':384}},
 										 {tw:{'mc':'tuowei4','x':954,'y':234,'sacle':-1},bm:{'mc':'bomb3','x':725,'y':360}}];
 		
-		private var timer:Timer;
+		public var timer:Timer;
 		public function MainContent() {
 			//bg = new MovieClip();
 			efLayer = new MovieClip();
@@ -80,14 +86,12 @@
 			bitmap2 = new Bitmap(bitmapData);
 			bitmap2.x = bitmap1.width;
 			bitmap1.y = bitmap2.y = 0;
-			addChild(bitmap1);
-			addChild(bitmap2);
 			addChildAt(bitmap1,0);
 			addChildAt(bitmap2,1);
 			orignHomex = home.x;
 			orignHomey = home.y;
 			
-			tid = setInterval(playEf,2000)
+			tid = setInterval(playEf,5000)
 			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX,stage.stageHeight);
 			//fitArea.attach(bitmap1, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.CENTER, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:800, maxHeight:Consts.MAX_HEIGHT});			
 			
@@ -95,24 +99,32 @@
 			//fitArea.attach(bitmap2, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.CENTER, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:800, maxHeight:Consts.MAX_HEIGHT});			
 			
 			//addEventListener(Event.ENTER_FRAME,enterFrameHandler);
+			//addEventListener(MouseEvent.MOUSE_OUT,function():void{home.stopDrag()});
+			//addEventListener(MouseEvent.MOUSE_OVER,function():void{home.startDrag(false,new Rectangle(0,0,Capabilities.screenResolutionX,stage.stageHeight))});
 			timer.start();
 		}
 		/**
 		 *播放特效 
-		 */		
+		 */	
+		private var len1:int=0;
+		private var len2:int=0;
 		private function playEf():void{
 			//清空 特效层 
 			while(efLayer.numChildren >0){
 				efLayer.removeChildAt(0);
 			}
-			var len1:int = Math.random()*(efArr.length);
-			var len2:int = Math.random()*(mirrorEfArr.length);
+		//	this.twMC = null;
+		//	this.bmMc = null;
+		//	this.mtwMC = null;
+		//	this.mbmMc = null;
+			len1= Math.random()*(efArr.length);
+			len2= Math.random()*(mirrorEfArr.length);
 			
-			var twMC:MovieClip = this[efArr[len1].tw.mc];
-			var bmMc:MovieClip = this[efArr[len1].bm.mc];
+			twMC = this[efArr[len1].tw.mc];
+			bmMc = this[efArr[len1].bm.mc];
 			twMC.scaleX = 1;
 			twMC.alpha = 1;
-			twMC.gotoAndPlay(1)
+			twMC.gotoAndPlay(1);
 			//bmMc.stop()
 			twMC.x = efArr[len1].tw.x;
 			twMC.y = efArr[len1].tw.y;
@@ -122,19 +134,16 @@
 				TweenLite.to(twMC,0.3,{alpha:0});
 				twMC.stop();
 				bmMc.gotoAndPlay(1)})
-			bmMc.addFrameScript(bmMc.totalFrames-1,function():void{bmMc.stop()});
 			
-			var mtwMC:MovieClip = this[mirrorEfArr[len2].tw.mc];
+			mtwMC = this[mirrorEfArr[len2].tw.mc];
 			mtwMC.scaleX = -1;
 			mtwMC.gotoAndPlay(1);
 			mtwMC.alpha = 1;
-			var mbmMc:MovieClip = this[mirrorEfArr[len2].bm.mc];
-			//mbmMc.stop();/
+			mbmMc = this[mirrorEfArr[len2].bm.mc];
 			mtwMC.addFrameScript(mtwMC.totalFrames - 1,function():void{
 				mtwMC.stop();
 				TweenLite.to(mtwMC,0.3,{alpha:0});
 				mbmMc.gotoAndPlay(1)});
-			//mbmMc.addFrameScript(bmMc.totalFrames-1,function():void{mbmMc.stop()});
 			mtwMC.x = mirrorEfArr[len2].tw.x;
 			mtwMC.y = mirrorEfArr[len2].tw.y;
 			mbmMc.x = mirrorEfArr[len2].bm.x;
@@ -149,40 +158,41 @@
 			enterFrameHandler();
 		}
 		private function enterFrameHandler(e:Event = null):void{
-/*			ship1.x +=0.4;
-			//ship1.scaleX += 0.1;
-			//ship1.scaleY += 0.1
+			//trace(stage.stageWidth);
+			ship1.x +=0.4;
+			if(ship1.x >= stage.stageWidth){
+				ship1.x = 0;
+			}
 				
 			ship2.x -=0.2
-			//ship2.scaleX +=0.1;
-			//ship2.scaleY +=0.1;
-			
+			if(ship2.x+ship2.width <=0){
+				ship2.x = stage.stageWidth;
+			}
 			island1.x += 0.4;
 			island1.y+=0.01;
 			//island1.scaleX += 0.02;
 			//island1.scaleY += 0.02;
 			
-			island2.x +=0.03;
-			island2.y +=0.01;
-			island2.scaleX += 0.02;
-			island2.scaleY += 0.02;
-*/
+			island2.x -=0.03;
+			island2.y -=0.01;
+			//island2.scaleX += 0.02;
+			//island2.scaleY += 0.02;
 
 			var value:Number = -1 + stage.mouseX / Consts.limitWidth(stage.stageWidth) * 0.8;
 			var svalue:Number = Consts.getStageScaleX(stage);
 			var numx:Number = value * (-50 * svalue) + orignHomex * svalue;
 			var numy:Number = value * (-50 * svalue) + orignHomey *svalue;
-			//home.x = home.x + (numx - home.x) * 0.1
-			TweenLite.to(home,0.03,{x:home.x + (numx - home.x) * 0.1});
+			home.x = home.x + (numx - home.x) * 0.1
+			//TweenLite.to(home,0.03,{x:home.x + (numx - home.x) * 0.1});
 			//TweenLite.to(home,0.03,{y:home.y +(numy - home.y)*0.1});
 			home.y = home.y +(numy - home.y)*0.1 ;
 			bitmap1.x -=0.2;
 			bitmap2.x -=0.2
-			if(bitmap1.x <= - bitmap1.width){
-				bitmap1.x = bitmap1.width;
+			if(bitmap1.x+bitmap1.width <= 0){
+				bitmap1.x = bitmap2.x + bitmap1.width;
 			}
-			if(bitmap2.x <= -bitmap2.width){	
-				bitmap2.x = bitmap2.width;
+			if(bitmap2.x + bitmap2.width <= 0){	
+				bitmap2.x = bitmap1.x + bitmap2.width;
 			}
 		}
 		public function layout() : void
@@ -206,6 +216,7 @@
 		public function destroy():void{
 			clearInterval(tid);
 			removeEventListener(Event.ENTER_FRAME,enterFrameHandler);
+			timer.stop();
 		}
 	}
 }

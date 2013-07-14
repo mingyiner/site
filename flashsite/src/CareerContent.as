@@ -109,6 +109,7 @@
 
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
 			addEventListener(Event.REMOVED_FROM_STAGE,removeFromStage);
+			trace("caree");
 		}
 		protected function addToStageHandler(event:Event):void
 		{
