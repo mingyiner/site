@@ -16,7 +16,7 @@
 	import flash.system.Capabilities;
 	
 	
-	public class CareerContent extends MovieClip {
+	public class CareerContent extends MovieClip implements ILayoutable{
 		
 		/**
 		 *人 logo
@@ -132,7 +132,6 @@
 			bg.graphics.beginFill(0x0,0.7);
 			bg.graphics.drawRect(0,0,Capabilities.screenResolutionX,stage.stageWidth);
 			bg.graphics.endFill();
-			
 			setSelctBtnIndex(0);
 		}
 		private function setSelctBtnIndex(index:int):void{
@@ -142,12 +141,12 @@
 					btnArr[i].startEffect();
 					btnArr[i].enabled = false;
 					playCareer(index);
-					TweenLite.to(desArr[i],0.4,{alpha:1,x:Capabilities.screenResolutionX -desArr[i].width});
+					TweenLite.to(desArr[i],0.4,{alpha:1,x:stage.stageWidth -desArr[i].width});
 				}else{
 					careerArr[i].gray();
 					btnArr[i].destroy();
 					btnArr[i].enabled = true;
-					TweenLite.to(desArr[i],0.2,{alpha:0,x:Capabilities.screenResolutionX,ease:Expo.easeOut});
+					TweenLite.to(desArr[i],0.2,{alpha:0,x:stage.stageWidth,ease:Expo.easeOut});
 				}
 			}
 			pContainerMc.x = (Capabilities.screenResolutionX-pContainerMc.width)/2;
@@ -191,7 +190,7 @@
 			careerArr[index].light();
 			
 		}
-		private function layout():void{
+		public function layout():void{
 			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX, Capabilities.screenResolutionY);
 			//fitArea.attach(this["bg"], {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:Consts.MIN_HEIGHT, maxHeight:Consts.MAX_HEIGHT});			
 			
@@ -201,8 +200,19 @@
 				btnArr[i].x = 100;
 				btnArr[i].y = 200+(btnArr[i].height+30)*i;
 			}
+			zoomCharactersByScale(true);
 		}
-		
+		private function zoomCharactersByScale(value:Boolean) : void
+		{
+			var useAnimation:Boolean = value;
+			var scalex:Number = Consts.getStageScaleX(stage);
+			var scaley:Number = Consts.getStageScaleY(stage);
+			trace(scalex,scaley + "scale");
+			if (useAnimation)
+			{
+				TweenLite.to(this.pContainerMc, 1, {scaleX:scalex, scaleY:scalex, ease:Expo.easeOut});
+			}
+		}// end function
 		private function removeFromStage(e:Event):void{
 			personLogoBtn.destroy();
 			orcLogoBtn.destroy();

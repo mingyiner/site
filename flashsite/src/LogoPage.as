@@ -26,12 +26,13 @@
 		private var subStage:SubStage;
 		private var subStageVisible:Boolean = false;
 		private var fitArea:AutoFitArea;
-		private static const SUB_STAGES:Object = {careerBtn:{file:"career.swf", data:null}};
-		public function LogoPage(content:MainContent,menu:MainMenuBar,bd:BitmapData) {
+		private static const SUB_STAGES:Object = {careerBtn:{file:"career.swf", data:null},gameIntro:{file:"gameInfo.swf", data:null}};
+		public  var haze:MovieClip;
+		public function LogoPage(content:MainContent,bd:BitmapData) {
 			super("firstContent");
 			mainContent = content;
 			mainContent.bitmapData = bd;
-			mainMenu = menu;
+			//mainMenu = menu;
 			
 			var loading:Preloader = new Preloader();
 			tip.addChild(loading);
@@ -56,15 +57,24 @@
 		{
 			Preloader(tip.getChildAt(0)).layout();
 			mainContent.layout();
+			
 			if (currentStage != null && currentStage != this)
 			{
+				if(currentStage is CareerPage){
+					CareerPage(currentStage).careerContent.layout();
+				}
 				//ILayoutable(currentStage).layout();
 			}
-			mainMenu.x = -277//Math.abs(Consts.limitWidth(Capabilities.screenResolutionX) - mainMenu.width)/2;
-			mainMenu.x = (Capabilities.screenResolutionX - mainMenu.width )/2
+			haze.alpha = 0.7;
+			//mainMenu.x = -277//Math.abs(Consts.limitWidth(Capabilities.screenResolutionX) - mainMenu.width)/2;
+			
 			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX, Capabilities.screenResolutionY);
-			//fitArea.attach(mainMenu, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:Consts.MIN_HEIGHT, maxHeight:Consts.MAX_HEIGHT});			
-			mainMenu.y = stage.stageHeight - mainMenu.height;
+			//fitArea.attach(haze, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.TOP, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:Consts.MIN_HEIGHT, maxHeight:Consts.MAX_HEIGHT});			
+			
+			var scalex:Number = Consts.getStageScaleX(stage);
+			TweenLite.to(haze, 1, {scaleX:scalex, scaleY:scalex, ease:Expo.easeOut});
+			haze.x = (Capabilities.screenResolutionX - haze.width )/2
+			haze.y = stage.stageHeight - haze.height;
 			return;
 		}
 		public function initializeWithData() : void
@@ -72,9 +82,11 @@
 			TweenLite.from(this, 5, {colorMatrixFilter:{brightness:4}, ease:Expo.easeOut});
 
 			content.addChild(mainContent);
-			toppest.addChild(mainMenu);
+			toppest.addChild(haze);
+			//toppest.addChild(mainMenu);
 			//toppest.y = Cons
-			mainMenu.btnClickHandler = menuButtonClicked;
+			//mainMenu.btnClickHandler = menuButtonClicked;
+			mainContent.btnClickHandler = menuButtonClicked;
 			currentStage = this;
 			
 		}
@@ -90,7 +102,7 @@
 				}
 				return;
 			}
-			if(e.currentTarget.name == "logoBtn"){
+/*			if(e.currentTarget.name == "logoBtn"){
 				
 				mainContent.animatedIn();
 				lastActivedButtonName = e.currentTarget.name;
@@ -120,9 +132,23 @@
 			}
 			lastActivedButtonName = e.target.name;
 			MenuButton(e.currentTarget).active();
-			MenuButton(e.currentTarget).enabled = false;
-			
-			loadSubStage(obj);
+			MenuButton(e.currentTarget).enabled = false;*/
+			var obj:Object;
+			switch(e.currentTarget.name)
+			{
+				case 'careerBtn':
+					obj = SUB_STAGES[e.target.name];
+					break;
+				case 'gameIntro':
+					obj = SUB_STAGES[e.target.name];
+					break;
+				default:
+					return;
+					break;
+			}
+			if(obj){
+				loadSubStage(obj);
+			}
 		}
 		private function loadSubStage(obj:Object) : void
 		{

@@ -69,12 +69,14 @@
 										 {tw:{'mc':'tuowei4','x':954,'y':234,'sacle':-1},bm:{'mc':'bomb3','x':725,'y':360}}];
 		
 		public var timer:Timer;
+		public var menuClickHandler:Function;
 		public function MainContent() {
-			//bg = new MovieClip();
 			efLayer = new MovieClip();
 			addChild(efLayer);
 			
-			timer = new Timer(100);
+			home.gameIntro.addEventListener(MouseEvent.CLICK,clickHandler);
+			home.careerBtn.addEventListener(MouseEvent.CLICK,clickHandler);
+			timer = new Timer(60);
 			timer.addEventListener(TimerEvent.TIMER,timerHandler);
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
 		}
@@ -83,15 +85,17 @@
 		{
 			
 			bitmap1 = new Bitmap(bitmapData);
+			bitmap1.x = 0;
 			bitmap2 = new Bitmap(bitmapData);
 			bitmap2.x = bitmap1.width;
 			bitmap1.y = bitmap2.y = 0;
 			addChildAt(bitmap1,0);
 			addChildAt(bitmap2,1);
-			orignHomex = home.x;
-			orignHomey = home.y;
+			orignHomex = (Capabilities.screenResolutionX - home.width)/2;
+			orignHomey = (stage.stageHeight - home.height)/2;
 			
-			tid = setInterval(playEf,5000)
+			tid = setInterval(playEf,2000);
+			
 			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX,stage.stageHeight);
 			//fitArea.attach(bitmap1, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.CENTER, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:800, maxHeight:Consts.MAX_HEIGHT});			
 			
@@ -113,10 +117,6 @@
 			while(efLayer.numChildren >0){
 				efLayer.removeChildAt(0);
 			}
-		//	this.twMC = null;
-		//	this.bmMc = null;
-		//	this.mtwMC = null;
-		//	this.mbmMc = null;
 			len1= Math.random()*(efArr.length);
 			len2= Math.random()*(mirrorEfArr.length);
 			
@@ -168,16 +168,30 @@
 			if(ship2.x+ship2.width <=0){
 				ship2.x = stage.stageWidth;
 			}
-			island1.x += 0.4;
-			island1.y+=0.01;
-			//island1.scaleX += 0.02;
-			//island1.scaleY += 0.02;
+			
+			island1.x += 0.3;
+			island1.y+=0.1;
+			if(island1.x >= 572 || island1.y >= 750){
+				island1.x -= 0.2;
+				island2.y -= 0.1;
+			}
+			if(island1.x < 0|| island1.y < 466){
+				island1.x += 0.3;
+				island1.y+=0.1;
+			}
 			
 			island2.x -=0.03;
 			island2.y -=0.01;
-			//island2.scaleX += 0.02;
-			//island2.scaleY += 0.02;
-
+			if(island2.x <= 887 || island2.y <640){
+				island2.x +=0.1;
+				island2.y += 0.1;
+				
+			}
+			
+			if(island2.x >= stage.stageWidth || island2.y >= 374){
+				island2.x -= 0.1;
+				island2.y -= 0.1;
+			}
 			var value:Number = -1 + stage.mouseX / Consts.limitWidth(stage.stageWidth) * 0.8;
 			var svalue:Number = Consts.getStageScaleX(stage);
 			var numx:Number = value * (-50 * svalue) + orignHomex * svalue;
@@ -186,8 +200,8 @@
 			//TweenLite.to(home,0.03,{x:home.x + (numx - home.x) * 0.1});
 			//TweenLite.to(home,0.03,{y:home.y +(numy - home.y)*0.1});
 			home.y = home.y +(numy - home.y)*0.1 ;
-			bitmap1.x -=0.2;
-			bitmap2.x -=0.2
+			bitmap1.x -=0.3;
+			bitmap2.x -=0.3;
 			if(bitmap1.x+bitmap1.width <= 0){
 				bitmap1.x = bitmap2.x + bitmap1.width;
 			}
@@ -201,10 +215,10 @@
 			{
 				return;
 			}
-			fitArea.x = 0;
-			fitArea.y = 0;
-			fitArea.width = Capabilities.screenResolutionX;
-			fitArea.height =  Capabilities.screenResolutionY;
+			//fitArea.x = 0;
+			//fitArea.y = 0;
+			//fitArea.width = Capabilities.screenResolutionX;
+			//fitArea.height =  Capabilities.screenResolutionY;
 		}
 		
 		public function animatedIn():void{
@@ -217,6 +231,16 @@
 			clearInterval(tid);
 			removeEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			timer.stop();
+		}
+		private function clickHandler(e:Event):void{
+			menuClickHandler.call(null,e);
+		}
+
+		public function set btnClickHandler(f:Function):void{
+			menuClickHandler = f;
+		}
+		public function get btnClickHandler():Function{
+			return menuClickHandler;
 		}
 	}
 }

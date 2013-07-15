@@ -11,6 +11,7 @@
 	import com.greensock.loading.XMLLoader;
 	import com.greensock.plugins.AutoAlphaPlugin;
 	import com.greensock.plugins.BlurFilterPlugin;
+	import com.greensock.plugins.CacheAsBitmapPlugin;
 	import com.greensock.plugins.ColorMatrixFilterPlugin;
 	import com.greensock.plugins.DropShadowFilterPlugin;
 	import com.greensock.plugins.GlowFilterPlugin;
@@ -164,7 +165,9 @@
 			var bm2:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb2") as Class;
 			var bm3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb3") as Class;
 
-			var logoPage:LogoPage = new LogoPage(new content(),new menu(),new bg() as BitmapData);
+			var haze:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Haze") as Class;
+			var logoPage:LogoPage = new LogoPage(new content(),new bg() as BitmapData);
+			logoPage.haze = new haze() as MovieClip;
 			logoPage.mainContent.tuowei1 = new tw1() as MovieClip;
 			logoPage.mainContent.tuowei2 = new tw2() as MovieClip;
 			logoPage.mainContent.tuowei3 = new tw3() as MovieClip;
@@ -173,6 +176,8 @@
 			logoPage.mainContent.bomb1 = new bm1() as MovieClip;
 			logoPage.mainContent.bomb2 = new bm2() as MovieClip;
 			logoPage.mainContent.bomb3 = new bm3() as MovieClip;
+			
+			//logoPage.mainContent.haze = new haze() as MovieClip;
 			mainStage.addChild(logoPage);
 			logoPage.initializeWithData();
 			//var i:IMain = sloader.rawContent as IMain;

@@ -11,7 +11,7 @@
 	
 	public class CareerPage extends MovieClip {
 		
-		private var careerContent:CareerContent;
+		public var careerContent:CareerContent;
 		public function CareerPage(){
 			careerContent = new CareerContent();
 			addChild(careerContent);
