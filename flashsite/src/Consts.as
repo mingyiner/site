@@ -5,7 +5,7 @@
 
     public class Consts extends Object
     {
-        public static const MIN_WIDTH:int = 980;
+        public static const MIN_WIDTH:int = 1064;
         public static const MIN_HEIGHT:int = 600;
         public static const MAX_WIDTH:int = 1920;
         public static const MAX_HEIGHT:int = 993;

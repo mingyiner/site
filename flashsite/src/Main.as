@@ -45,6 +45,8 @@
 		private var videoLayer:VideoContainer;
 		
 		private var startPointReached:Boolean;
+		
+		private var logoPage:LogoPage
 		public function Main() {
 			System.useCodePage = true;
 			stop();
@@ -56,9 +58,6 @@
 		}
 		private function initMc():void
 		{
-			var w:int = this.stage.stageWidth;
-			var h:int = this.stage.stageHeight;
-			stage.frameRate=30;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.addEventListener(Event.RESIZE, onResize, false, 0, true);
@@ -67,7 +66,9 @@
 			addChild(mainStage);
 			
 			preLoader = new Preloader();
-			preLoader.alpha = 0;
+			preLoader.x =(stage.stageWidth - preLoader.width)/2;
+			preLoader.y = (stage.stageHeight - preLoader.height)/2;
+			//preLoader.alpha = 0;
 			addChild(preLoader);	
 			
 			TweenLite.to(preLoader, 0.2, {alpha:1, ease:Quad.easeOut});
@@ -166,7 +167,7 @@
 			var bm3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb3") as Class;
 
 			var haze:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Haze") as Class;
-			var logoPage:LogoPage = new LogoPage(new content(),new bg() as BitmapData);
+			logoPage = new LogoPage(new content(),new menu(),new bg() as BitmapData);
 			logoPage.haze = new haze() as MovieClip;
 			logoPage.mainContent.tuowei1 = new tw1() as MovieClip;
 			logoPage.mainContent.tuowei2 = new tw2() as MovieClip;
@@ -178,8 +179,8 @@
 			logoPage.mainContent.bomb3 = new bm3() as MovieClip;
 			
 			//logoPage.mainContent.haze = new haze() as MovieClip;
-			mainStage.addChild(logoPage);
 			logoPage.initializeWithData();
+			mainStage.addChild(logoPage);
 			//var i:IMain = sloader.rawContent as IMain;
 			//mainStage.addChild(sloader.rawContent);
 			//i.initializeWithData();
@@ -211,6 +212,9 @@
 			}
 			if(preLoader){
 				preLoader.layout();
+			}
+			if(logoPage){
+				logoPage.onResize();
 			}
 		}
 

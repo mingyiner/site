@@ -74,8 +74,8 @@
 			efLayer = new MovieClip();
 			addChild(efLayer);
 			
-			home.gameIntro.addEventListener(MouseEvent.CLICK,clickHandler);
-			home.careerBtn.addEventListener(MouseEvent.CLICK,clickHandler);
+			//home.gameIntro.addEventListener(MouseEvent.CLICK,clickHandler);
+			//home.careerBtn.addEventListener(MouseEvent.CLICK,clickHandler);
 			timer = new Timer(60);
 			timer.addEventListener(TimerEvent.TIMER,timerHandler);
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
@@ -84,6 +84,8 @@
 		protected function addToStageHandler(event:Event):void
 		{
 			
+			TweenLite.from(this, 3, {colorMatrixFilter:{brightness:3}, ease:Expo.easeOut});
+
 			bitmap1 = new Bitmap(bitmapData);
 			bitmap1.x = 0;
 			bitmap2 = new Bitmap(bitmapData);
@@ -91,10 +93,10 @@
 			bitmap1.y = bitmap2.y = 0;
 			addChildAt(bitmap1,0);
 			addChildAt(bitmap2,1);
-			orignHomex = (Capabilities.screenResolutionX - home.width)/2;
+			orignHomex = (Capabilities.screenResolutionX - home.width)/2 + 100;
 			orignHomey = (stage.stageHeight - home.height)/2;
 			
-			tid = setInterval(playEf,2000);
+			tid = setInterval(playEf,500);
 			
 			//fitArea = new AutoFitArea(this, 0, 0, Capabilities.screenResolutionX,stage.stageHeight);
 			//fitArea.attach(bitmap1, {crop:true, scaleMode:ScaleMode.PROPORTIONAL_OUTSIDE, hAlign:AlignMode.CENTER, vAlign:AlignMode.CENTER, roundPosition:true, minWidth:Consts.MIN_WIDTH, maxWidth:Consts.MAX_WIDTH, minHeight:800, maxHeight:Consts.MAX_HEIGHT});			
@@ -159,7 +161,7 @@
 		}
 		private function enterFrameHandler(e:Event = null):void{
 			//trace(stage.stageWidth);
-			ship1.x +=0.4;
+			ship1.x +=0.8;
 			if(ship1.x >= stage.stageWidth){
 				ship1.x = 0;
 			}
@@ -170,22 +172,13 @@
 			}
 			
 			island1.x += 0.3;
-			island1.y+=0.1;
-			if(island1.x >= 572 || island1.y >= 750){
-				island1.x -= 0.2;
-				island2.y -= 0.1;
-			}
-			if(island1.x < 0|| island1.y < 466){
-				island1.x += 0.3;
-				island1.y+=0.1;
+			if(island1.x >= Consts.limitWidth(stage.stageWidth)){
+				island1.x = 0;
 			}
 			
-			island2.x -=0.03;
-			island2.y -=0.01;
-			if(island2.x <= 887 || island2.y <640){
-				island2.x +=0.1;
-				island2.y += 0.1;
-				
+			island2.x +=0.3;
+			if(island2.x >= Consts.limitWidth(stage.stageWidth)){
+				island2.x = 0;
 			}
 			
 			if(island2.x >= stage.stageWidth || island2.y >= 374){
@@ -200,8 +193,8 @@
 			//TweenLite.to(home,0.03,{x:home.x + (numx - home.x) * 0.1});
 			//TweenLite.to(home,0.03,{y:home.y +(numy - home.y)*0.1});
 			home.y = home.y +(numy - home.y)*0.1 ;
-			bitmap1.x -=0.3;
-			bitmap2.x -=0.3;
+			bitmap1.x -=1;
+			bitmap2.x -=1;
 			if(bitmap1.x+bitmap1.width <= 0){
 				bitmap1.x = bitmap2.x + bitmap1.width;
 			}
@@ -223,14 +216,14 @@
 		
 		public function animatedIn():void{
 			TweenLite.killTweensOf(this);
-			TweenLite.from(this, 5, {colorMatrixFilter:{brightness:4}, ease:Expo.easeOut});
-			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			tid = setInterval(playEf,2000);
+			timer.start();
+			this.efLayer.visible =this.ship1.visible = this.ship2.visible =this.home.visible =this.island1.visible = this.island2.visible  = true;
 		}
 		public function destroy():void{
 			clearInterval(tid);
-			removeEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			timer.stop();
+			this.efLayer.visible =this.ship1.visible = this.ship2.visible =this.home.visible =this.island1.visible = this.island2.visible  = false;
 		}
 		private function clickHandler(e:Event):void{
 			menuClickHandler.call(null,e);

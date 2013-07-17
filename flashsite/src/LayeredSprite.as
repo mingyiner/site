@@ -30,11 +30,13 @@ package
 		private function generateLayers() : void
 		{
 			this.layers["background"] = new Sprite();
+			this.layers['contentMask'] = new Sprite();
 			this.layers["content"] = new Sprite();
 			this.layers["toppest"] = new Sprite();
 			this.layers["tip"] = new Sprite();
 			this.layers["mask"] = new Sprite();
 			addChild(this.layers["background"] as Sprite);
+			addChild(this.layers["contentMask"] as Sprite);
 			addChild(this.layers["content"] as Sprite);
 			addChild(this.layers["toppest"] as Sprite);
 			addChild(this.layers["mask"] as Sprite);
@@ -55,7 +57,10 @@ package
 		{
 			return this.getLayer("content");
 		}
-		
+		public function get contentMask() : Sprite
+		{
+			return this.getLayer("contentMask");
+		}
 		public function get toppest() : Sprite
 		{
 			return this.getLayer("toppest");
