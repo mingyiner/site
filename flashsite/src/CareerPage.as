@@ -62,6 +62,9 @@
 				//fitArea.width = Consts.limitWidth(stage.stageWidth);
 				//fitArea.height = Consts.limitHeight(stage.stageHeight);
 				var scalex:Number = Consts.getStageScaleX(stage);
+				if(scalex >= 0.9){
+					scalex = 1;
+				}
 				//TweenLite.to(maskMc, 0.5, {scaleX:scalex, ease:Expo.easeOut});
 				TweenLite.to(careerContent,0.5,{scaleX:scalex,scaleY:scalex});
 				TweenLite.delayedCall(0.5,function():void{

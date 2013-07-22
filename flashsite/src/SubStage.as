@@ -59,8 +59,8 @@
 		private function loadingDone(event:LoaderEvent) : void
 		{
 			this.stage = SWFLoader(LoaderMax.getLoader("swfLoader")).rawContent;
-			//var xmlLoader:XMLLoader= LoaderMax.getLoader("xmlLoader") as XMLLoader;
-			//this.data = !xmlLoader ? xmlLoader.content:null;
+			var xmlLoader:XMLLoader= LoaderMax.getLoader("xmlLoader") as XMLLoader;
+			this.data = !xmlLoader ? null:xmlLoader.content;
 			disposeLoader();
 			dispatchEvent(event);
 			return;

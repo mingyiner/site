@@ -1,0 +1,9 @@
+<?xml version="1.0" ?> 
+<root>
+<item id = '0' mc = 'ef1' x = '789' y= '50' sacle = '1'></item>
+<item id = '0' mc = 'ef2' x = '939' y= '32' sacle = '1'></item>
+<item id = '0' mc = 'ef3' x = '917' y= '141' sacle = '1'></item>
+<item id = '1' mc = 'mEf1' x = '556' y= '8' sacle = '-1'></item>
+<item id = '1' mc = 'mEf2' x = '789' y= '44' sacle = '-1'></item>
+<item id = '1' mc = 'mEf3' x = '954' y= '234' sacle = '-1'></item>
+</root>

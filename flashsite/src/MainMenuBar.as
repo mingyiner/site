@@ -9,6 +9,8 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
 	
 	
@@ -53,15 +55,19 @@
 			
 			var mc:MovieClip = new MovieClip();
 			mc.graphics.clear();
-			mc.graphics.beginFill(0x0,0.5);
+			mc.graphics.beginFill(0x0,0);
 			mc.graphics.drawRect(0,0,100,20);
 			mc.graphics.endFill();
 			tip.addChild(mc);
-			mc.x = visonBtn.x;
+			mc.x = visonBtn.x+20;
 			mc.y = visonBtn.y-20;
 			
 			var txt:TextField = new TextField();
-			txt.width = 100;
+			var tf:TextFormat = new TextFormat();
+			tf.color = '0xcc0000';
+			txt.defaultTextFormat = tf;
+			//txt.autoSize =TextFormatAlign.CENTER;
+			txt.width = 70;
 			txt.height = 18
 			txt.text = '敬请期待';
 			mc.addChild(txt);
@@ -102,20 +108,20 @@
 			arrows.hide.visible = true;
 			arrows.open.visible = false;
 			isShow = true;
-			TweenLite.to(this,0.3,{x:stage.stageWidth - this.width - 3,autoAlpha:1});
+			TweenLite.to(this,0.3,{x:Consts.limitWidth(stage.stageWidth) - this.width +3,autoAlpha:1});
 		}
 		public function hide():void{
 			isShow = false;
 			arrows.hide.visible = false;
 			arrows.open.visible = true;
-			TweenLite.to(this,0.3,{x:stage.stageWidth-17,autoAlpha:1});
+			TweenLite.to(this,0.3,{x:Consts.limitWidth(stage.stageWidth)-25,autoAlpha:1});
 		}
 		public function layout():void{
 			tip.visible = false;
 			if(!stage) return;
-			var scale:Number = Consts.getStageScaleX(stage);
+			//var scale:Number = Consts.getStageScaleX(stage);
 			//TweenLite.to(this, 1, {scaleX:scale, scaleY:scale, ease:Expo.easeOut});
-			this.x = Consts.limitWidth(stage.stageWidth) - this.width*scale;
+			this.x = Consts.limitWidth(stage.stageWidth) - this.width//*scale;
 		}
 		private function arrowsClickHandler(e:MouseEvent):void{
 			isShow?hide():show();

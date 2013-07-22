@@ -35,7 +35,8 @@
 		private var bgBitmapData:BitmapData;
 		public var testBg:MovieClip;
 		private var maskMc:MovieClip;
-		public function LogoPage(content:MainContent,menu:MainMenuBar,bd:BitmapData) {
+		private var logoMc:MovieClip;
+		public function LogoPage(content:MainContent,menu:MainMenuBar,bd:BitmapData,lgBd:BitmapData) {
 			super("firstContent");
 			mainContent = content;
 			mainContent.bitmapData = bd;
@@ -48,6 +49,9 @@
 			
 			
 			maskMc = new MovieClip();
+			logoMc = new MovieClip();
+			logoMc.addChild(new Bitmap(lgBd));
+			addChild(logoMc);
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
 		}
 		private function addToStageHandler(e:Event):void{
@@ -94,6 +98,9 @@
 			//TweenLite.to(haze, 1, {scaleX:scalex, scaleY:scalex, ease:Expo.easeOut});
 			haze.x = (Consts.limitWidth(stage.stageWidth) - haze.width )/2
 			haze.y = stage.stageHeight - haze.height;
+			maskMc.width = Consts.limitWidth(stage.stageWidth);
+			logoMc.x = Consts.limitWidth(stage.stageWidth)  - mainMenu.width - logoMc.width - 20;
+			logoMc.y = 10;
 			stage.removeEventListener(Event.RESIZE, onResize);
 		}
 		public function initializeWithData() : void
@@ -163,6 +170,7 @@
 			{
 				case 'logoBtn':
 					mainContent.animatedIn();
+					logoMc.visible = true;
 					if (currentStage != null && currentStage != this && content.contains(currentStage))
 					{
 						content.removeChild(currentStage);
@@ -186,7 +194,25 @@
 					break;
 			}
 			if(obj){
-				loadSubStage(obj);
+				if(ViewContainerManager.instance.hasPageView(pageName)){
+					var sp:Sprite = ViewContainerManager.instance.getPageview(pageName) as Sprite;
+					sp.addEventListener('reomveFromList',pageRemoveFromStageHandler);
+					//curStage.x = (stage.stageWidth - curStage.width)/2;
+					//curStage.y = (stage.stageHeight - curStage.height)/2;
+					content.addChild(maskMc);
+					sp.alpha = 1;
+					content.addChild(sp);
+					if (currentStage != null && currentStage != this && content.contains(currentStage))
+					{
+						currentStage.removeEventListener('reomveFromList',pageRemoveFromStageHandler);
+						content.removeChild(currentStage);
+					}
+					currentStage = sp;
+					mainContent.destroy();
+					logoMc.visible = false;
+				}else{
+					loadSubStage(obj);
+				}
 			}
 		}
 		private function pageRemoveFromStageHandler(e:Event):void{
@@ -199,6 +225,7 @@
 			lastActivedButtonName = 'logoBtn';
 			currentStage = this;
 			mainContent.animatedIn();
+			logoMc.visible = true;
 			if(content.contains(maskMc)){
 				content.removeChild(maskMc);
 			}
@@ -242,7 +269,6 @@
 			if(subStage.stageContent is CareerPage){
 				CareerPage(subStage.stageContent).bg = new Bitmap(bgBitmapData);
 			}
-			//ViewContainerManager.instance.setPageView(subStage.stageContent.NAME,curStage);
 			curStage.addEventListener('reomveFromList',pageRemoveFromStageHandler);
 			//curStage.x = (stage.stageWidth - curStage.width)/2;
 			//curStage.y = (stage.stageHeight - curStage.height)/2;
@@ -261,6 +287,8 @@
 				});
 			}
 			mainContent.destroy();
+			logoMc.visible = false;
+			ViewContainerManager.instance.setPageView(subStage.stageContent.NAME,curStage);
 			return;
 		}
 		

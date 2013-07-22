@@ -24,8 +24,12 @@
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.system.Capabilities;
+	import flash.system.Security;
 	import flash.system.System;
+	import flash.utils.clearInterval;
+	import flash.utils.setInterval;
 	
 	[SWF(height = '800')]
 	public class Main extends MovieClip {
@@ -47,8 +51,12 @@
 		private var startPointReached:Boolean;
 		
 		private var logoPage:LogoPage
+		
+		private var subStage:SubStage;
 		public function Main() {
 			System.useCodePage = true;
+			Security.allowDomain("*");
+			Security.allowInsecureDomain("*");
 			stop();
 			addEventListener(Event.ADDED_TO_STAGE,addToStageHandler);
 		}
@@ -157,34 +165,57 @@
 			var content:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("MainContent") as Class;
 			var menu:Class= sloader.rawContent.loaderInfo.applicationDomain.getDefinition("MainMenuBar") as Class;
 			var bg:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("SiteBackground") as Class;
-			var tw1:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei1') as Class;
-			var tw2:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei2') as Class;
-			var tw3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei3') as Class;
-			var tw4:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Tuowei4') as Class;
-			
-			var bm1:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb1") as Class;
-			var bm2:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb2") as Class;
-			var bm3:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Bomb3") as Class;
-
+			var logo:Class =  sloader.rawContent.loaderInfo.applicationDomain.getDefinition('Logo') as Class;
 			var haze:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition("Haze") as Class;
-			logoPage = new LogoPage(new content(),new menu(),new bg() as BitmapData);
+			//var test:Class = sloader.rawContent.loaderInfo.applicationDomain.getDefinition('testBg') as Class;
+			logoPage = new LogoPage(new content(),new menu(),new bg() as BitmapData,new logo() as BitmapData);
 			logoPage.haze = new haze() as MovieClip;
-			logoPage.mainContent.tuowei1 = new tw1() as MovieClip;
-			logoPage.mainContent.tuowei2 = new tw2() as MovieClip;
-			logoPage.mainContent.tuowei3 = new tw3() as MovieClip;
-			logoPage.mainContent.tuowei4 = new tw4() as MovieClip;
 			
-			logoPage.mainContent.bomb1 = new bm1() as MovieClip;
-			logoPage.mainContent.bomb2 = new bm2() as MovieClip;
-			logoPage.mainContent.bomb3 = new bm3() as MovieClip;
-			
-			//logoPage.mainContent.haze = new haze() as MovieClip;
+			//logoPage.testBg = new test() as MovieClip;
 			logoPage.initializeWithData();
 			mainStage.addChild(logoPage);
-			//var i:IMain = sloader.rawContent as IMain;
-			//mainStage.addChild(sloader.rawContent);
-			//i.initializeWithData();
-			return;
+			loader.dispose();
+			loadEf();
+		}
+		/**
+		 *加载特效 
+		 * 
+		 */		
+		private function loadEf():void{
+			subStage = new SubStage();
+			subStage.addEventListener(LoaderEvent.PROGRESS, onSubStageLoadProgress);
+			subStage.addEventListener(LoaderEvent.COMPLETE, onSubStageLoaded);
+			subStage.addEventListener(LoaderEvent.ERROR, onSubStageLoadError);
+			subStage.stageAddress = Consts.resURL('ef.swf');
+			subStage.stageDataAddr = Consts.resURL('position.xml');
+			subStage.load();
+		}
+		private function onSubStageLoadProgress(event:LoaderEvent) : void
+		{
+			
+		}
+		
+		private function onSubStageLoaded(event:LoaderEvent) : void
+		{
+			var ef1:Class = subStage.stageContent.loaderInfo.applicationDomain.getDefinition("Effect1") as Class;
+			var ef2:Class = subStage.stageContent.loaderInfo.applicationDomain.getDefinition("Effect2") as Class;
+			var ef3:Class = subStage.stageContent.loaderInfo.applicationDomain.getDefinition("Effect3") as Class;
+			
+			logoPage.mainContent.ef1 = new ef1() as MovieClip;
+			logoPage.mainContent.ef2 = new ef2() as MovieClip;
+			logoPage.mainContent.ef3 = new ef3() as MovieClip;
+			
+			
+			logoPage.mainContent.mEf1 = new ef1() as MovieClip;
+			logoPage.mainContent.mEf2 = new ef2() as MovieClip;
+			logoPage.mainContent.mEf3 = new ef3() as MovieClip;
+			logoPage.mainContent.initPostion(subStage.stageData.item);
+			
+		}
+		
+		private function onSubStageLoadError(event:LoaderEvent) : void
+		{
+
 		}
 		private function videoEnd(event:LoaderEvent) : void
 		{
